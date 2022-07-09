@@ -10,8 +10,8 @@ import javax.swing.JOptionPane;
 
 //Classe principal, onde o jogo será rodado.
 final class Jogo {
-    IJogador jogador;
-    IJogador oponente;
+    Jogador jogador;
+    Jogador oponente;
     Bot ai;
     Tabuleiro tab1;
     Tabuleiro tab2;
@@ -62,7 +62,7 @@ final class Jogo {
     
     }
     
-    public void vitoria (IJogador jogador, IJogador oponente){
+    public void vitoria (Jogador jogador, Jogador oponente){
         JLabel texto;
         if (jogador.isVivo()){
             texto = new JLabel(jogador.getNome() + " venceu!");

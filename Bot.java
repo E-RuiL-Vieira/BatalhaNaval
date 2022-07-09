@@ -8,7 +8,7 @@ import java.util.*;
 
 
 //Essa classe é responsável pela IA do bot. Como o posicionamento aleatório dos navios já está contido na sua classe mãe, seu único método único é determinar como o tiro será feito.
-public final class Bot extends IJogador {
+public final class Bot extends Jogador {
     private int[] ultimotiro;
     private boolean acertou;
     private Direcao direcao;
