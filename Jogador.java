@@ -9,16 +9,16 @@ import java.util.Random;
 
 
 //Essa classe é um template no qual serão baseados tanto o jogador dos usuários quando o Bot.
-abstract public class Jogador {
+public class Jogador {
     protected Tabuleiro tab;
     protected final Random rand = new Random();
     protected ArrayList<Navio> navios; 
     protected String nome;
     
-    public Jogador(Tabuleiro tab, nome name){
-        this.nome = name;
+    public Jogador(Tabuleiro tab, String nome){
         navios = new ArrayList();
         this.tab = tab;
+        this.nome = nome;
         //1 porta aviões, 2 navio tanque, 3 contra torpedos e 4 submarinos
         this.navios.add(new Navio(TipoNavio.PORTAAVIOES));
         this.navios.add(new Navio(TipoNavio.NAVIOTANQUE));

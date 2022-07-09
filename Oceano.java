@@ -96,10 +96,18 @@ public abstract class Oceano extends JFrame {
     protected void cor(int i, int j){
         StatusQ status = tab.getCasa(i, j).getStatus();
         switch (status) {
-            case VAZIO -> casas[i][j].setBackground(Color.CYAN);
-            case ERRADO -> casas[i][j].setBackground(Color.RED);
-            case AFUNDADO -> casas[i][j].setBackground(Color.BLACK);
-            case NAVIO -> casas[i][j].setBackground(Color.GRAY);
+            case VAZIO:
+                casas[i][j].setBackground(Color.CYAN);
+                break;
+            case ERRADO:
+                casas[i][j].setBackground(Color.RED);
+                break;
+            case AFUNDADO:
+                casas[i][j].setBackground(Color.BLACK);
+                break;
+            case NAVIO: 
+                casas[i][j].setBackground(Color.GRAY);
+                break;
         }
     
     }

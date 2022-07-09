@@ -39,9 +39,8 @@ public class Tabuleiro {
     
     public boolean podeColocar(int x, int y, Direcao direcao, int comprimento){
         //Essa função é responsável por determinar se um navio pode ser colocado neste tabuleiro. Seus parâmetros são apenas os detalhes necessários.
-        switch(direcao){
-            case NORTE, SUL -> { //Casos de navio vertical
-                int y2 =  y + (direcao.getY() * comprimento); //Coordenadas da poupa do navio
+        if (direcao == Direcao.NORTE || direcao == Direcao.SUL) {
+            int y2 =  y + (direcao.getY() * comprimento); //Coordenadas da poupa do navio
                 if (y2 >= this.y || y2 < 0){ //Caso a poupa do navio ultrapasse os limites do tabuleiro, ele não pode ser colocado neste tabuleiro. 
                     return false;
                 }
@@ -49,17 +48,16 @@ public class Tabuleiro {
                     if (!isVazio(x, j)){
                             return false;                    
                 }
-            }
+            }   
         }
-            case OESTE, LESTE -> { //Casos de navio horizontal
-                int x2 = x + (direcao.getX() * comprimento); //Coordenadas da poupa do navio
-                if (x2 >= this.x || x2 < 0 ){ //Caso a poupa do navio ultrapasse os limites do tabuleiro, ele não pode ser colocado neste tabuleiro.
+        else if (direcao == Direcao.LESTE || direcao == Direcao.OESTE) {
+            int x2 = x + (direcao.getX() * comprimento); //Coordenadas da poupa do navio
+            if (x2 >= this.x || x2 < 0 ) { //Caso a poupa do navio ultrapasse os limites do tabuleiro, ele não pode ser colocado neste tabuleiro.
+                return false;
+            }
+            for(int i = x; i != x2; i=i+direcao.getX()) { //Verificamos todos os quadrados do futuro navio. Caso haja algum que não esteja vazio, um navio não pode ser colocado lá.
+                if (!isVazio(i, y)){
                     return false;
-                }
-                for(int i = x; i != x2; i=i+direcao.getX()){ //Verificamos todos os quadrados do futuro navio. Caso haja algum que não esteja vazio, um navio não pode ser colocado lá.
-                        if (!isVazio(i, y)){
-                            return false;
-                        }
                 }
             }
         }

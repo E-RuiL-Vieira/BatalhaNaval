@@ -16,7 +16,7 @@ public final class Bot extends Jogador {
     private LinkedList<Direcao> possiveis = new LinkedList<>();
         
     public Bot(Tabuleiro tab){
-        super(tab);
+        super(tab, "Bot");
         acertou = false;
         ultimotiro = new int[2];
         nome = "Computador";

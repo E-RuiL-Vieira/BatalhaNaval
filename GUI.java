@@ -43,14 +43,20 @@ public class GUI implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-               jogo = new Jogo();
+                try {
+                    jogo = new Jogo();
+                } catch (Exception ex){
+                } 
             }
         }); 
          button_single.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-               jogo = new Jogo();
+               try {
+                    jogo = new Jogo();
+                } catch (Exception ex){
+                } 
             }
         }); 
         
