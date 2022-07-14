@@ -26,7 +26,7 @@ final class Jogo implements Serializable {
     private ObjectOutputStream output;
     private boolean multiplayer;
     private boolean host;
-    private boolean vez;
+    
     
     public Jogo() throws IOException, ClassNotFoundException {
         host = false;
@@ -60,10 +60,9 @@ final class Jogo implements Serializable {
         Object[] hostopcoes = {"Hostear", "Entrar"};
         reply2 = JOptionPane.showInputDialog(null, "Hostear ou entrar", "Menu", JOptionPane.INFORMATION_MESSAGE, null, hostopcoes, hostopcoes[0]);
         Socket socket;
-        vez = true;
         if (reply2.equals("Hostear")) {// HOST
             host = true;
-            vez = true;
+            jogador.setVezJogador(true);
             ServerSocket server = new ServerSocket(1234);
             System.out.println("Aguardando conexões...");
             socket = server.accept();
@@ -73,7 +72,7 @@ final class Jogo implements Serializable {
         }
         else { // CLIENTE
             host = false;
-            vez = false;
+            jogador.setVezJogador(false);
             socket = new Socket("192.168.1.101", 1234);
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
@@ -86,64 +85,59 @@ final class Jogo implements Serializable {
     
     public void jogadas() throws ClassNotFoundException, IOException {
         if (multiplayer){
-            if (vez){ //Vez do Jogador
+            if (jogador.isVezJogador()){ //Vez do Jogador
                 try {
-                    System.out.println("if");
                     oponente = (Jogador)input.readObject();
                     tab2 = oponente.getTab();
-                    System.out.println("While");
-                    Partida oTab = new Partida(true, tab2);
-                    while(oTab.estaEmUso());
+                    Partida oTab = new Partida(true, tab2, jogador.getNome());
+                    while(oTab.estaEmUso()){
+                        esperar(10);
+                    }
                     System.out.println("Comeco envio");
-                    
+                    oponente.setVezJogador(true);
+                    jogador.setVezJogador(false);
                     output.writeObject(oponente); //Envia dados
                     System.out.println("Fim envio ddos");
-                    vez = false;
-                    jogador.setVezJogador(false);
-                    oponente.setVezJogador(true);
                     oTab.dispose();
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
                 output.writeObject(jogador); //Envia dados
-                output.flush();
+                jogador = (Jogador)input.readObject(); 
             }
             else{ // Vez do oponente
-                Partida jTab = new Partida(false, tab1);
-                output.writeObject(jogador);
-                output.flush();
-                System.out.println("else");
-                while (jogador.isVezJogador() == false) {
-                    System.out.println("Preso no loop");
+                tab1 = jogador.getTab(); //Tab1 recebe o tabuleiro do jogador local
+                Partida jTab = new Partida(false, tab1, jogador.getNome()); //Cria uma noja janela com o tabuleiro do player local
+                output.writeObject(jogador); //Envia o tabuleiro do jogador local para o oponente
+                while (!jogador.isVezJogador()) { //Enquanto a vez do jogador local não chegar, continua atualizando a tela
                     //Espera até que a vez do oponente termine
-                    jogador = (Jogador)input.readObject();
-                    jTab.setTab(jogador.getTab());
-                    jTab.atualizar();
-                    vez = true;
-                }
+                    jogador = (Jogador)input.readObject(); //Recebe de input do oponente o local do tiro
+                    jTab.setTab(jogador.getTab()); //Muda a janela para o novo tabuleiro recebido
+                    jTab.atualizar(); // Atualiza a tela
+                } 
+                oponente = (Jogador)input.readObject(); //Recebe de 
                 jogador.setVezJogador(true);
                 oponente.setVezJogador(false);
-                output.writeObject(jogador); //Envia dados
-                output.flush();
+                output.writeObject(oponente);
                 jTab.atualizar();
                 esperar(2000);
                 jTab.dispose();
-                System.out.println("Fim else");
             }
         }
         
         else{
-            Partida oTab = new Partida(true, tab2);
-            while(oTab.estaEmUso()); //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
+            Partida oTab = new Partida(true, tab1, jogador.getNome());
+            while(oTab.estaEmUso()){
+                esperar(10);
+            } //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
             esperar(2000); //Pausa para que o usuário analise o tabuleiro
             oTab.dispose();
-            Partida jTab = new Partida(false, tab1);
+            Partida jTab = new Partida(false, tab1, "Computador");
             esperar(2000); //Pausa dramática
             jTab.tirodadooponente(ai.atirar(tab1)); //Jogada do bot é feita
             esperar(2000); //Pausa para que o usuário analise o tabuleiro
             jTab.dispose();
         }
-        System.out.println("Fim jogdds");
     }
     
     public boolean verificarPartida(){

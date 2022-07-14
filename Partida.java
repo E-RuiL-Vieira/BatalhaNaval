@@ -10,23 +10,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 //Essa classe é responsável pela interface que é exibida para o usuário durante uma rodada. 
 public class Partida extends Oceano{
     private boolean vez; 
     private JLabel textovez;
-    private JFrame mostrartexto = new JFrame();
     private ActionListener ButtonListener;
 
     
-    public Partida(boolean vez, Tabuleiro tab){
+    public Partida(boolean vez, Tabuleiro tab, String titulo){
         super(tab);
         this.vez = vez;
         this.emuso = true;
         ativarbotoes(vez); //Caso seja a vez do jogador, os botões serão clicáveis. Caso não seja, e ele esteja apenas assistindo, ele não poderá interagir com o tabuleiro.
         atualizar(); //Atualizamos o tabuleiro para que seja aplicado o override da função cor
+        this.setTitle(titulo);
         
-    
         ButtonListener = (ActionEvent e) -> {
             int xCoord = Character.getNumericValue(e.getActionCommand().charAt(0));
             int yCoord = Character.getNumericValue(e.getActionCommand().charAt(1)); 
@@ -36,8 +36,9 @@ public class Partida extends Oceano{
                 tirodado(tab.getCasa(xCoord, yCoord).Alvo()); 
                 cor(xCoord, yCoord); 
                 ativarbotoes(false); //Como já acabou a rodada do jogador, os botões são desativados e o emuso é mudado para falso
-                System.out.println("TESTE");
                 emuso = false;
+                System.out.println("TESTE");
+
             }
         };
         for (int i = 0; i < tab.getX(); i++){ //Acrescenta o listener dos botões para todos os botões
@@ -63,18 +64,12 @@ public class Partida extends Oceano{
     
     public void tirodadooponente(boolean certo){ //Chamado quando o oponente está jogando.
         atualizar(); //Atualiza todos os quadrados, para que seja exibido onde o tiro foi dado.
-        JLabel texto;
         if (certo){
-            texto = new JLabel("O oponente acertou o tiro");
+            JOptionPane.showMessageDialog(null, "O oponente acertou o tiro", "Tiro", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            texto = new JLabel("O oponente errou o tiro");
+            JOptionPane.showMessageDialog(null, "O oponente errou o tiro", "Tiro", JOptionPane.INFORMATION_MESSAGE);
         }
-        mostrartexto.add(texto);
-        mostrartexto.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        mostrartexto.setSize( 200, 100 ); 
-        mostrartexto.setResizable(false);
-        mostrartexto.setVisible( true );
         
     }
     
@@ -91,24 +86,13 @@ public class Partida extends Oceano{
     }
     
     private void tirodado(boolean certo){ //Abre uma janela para informar ao jogador se ele acertou ou não o tiro.
-        JLabel texto;
         if (certo){
-            texto = new JLabel("Você acertou o tiro! :D");
+            JOptionPane.showMessageDialog(null, "Você acertou o tiro", "Tiro", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            texto = new JLabel("Você errou o tiro... :(");
-        }
-        mostrartexto.add(texto);
-        mostrartexto.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        mostrartexto.setSize( 200, 100 ); 
-        mostrartexto.setResizable(false);
-        mostrartexto.setVisible( true );        
+            JOptionPane.showMessageDialog(null, "Você errou o tiro", "Tiro", JOptionPane.INFORMATION_MESSAGE);
+        }      
     }
     
-    @Override
-    public void dispose(){ //Fecha também a tela sobre o tiro quando fechar o tabuleiro
-        mostrartexto.dispose();
-        super.dispose();
-    }
     
 }

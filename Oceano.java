@@ -27,7 +27,6 @@ public abstract class Oceano extends JFrame {
 
     
     public Oceano(Tabuleiro tab){
-        //Inicializa os detalhes da interface
         this.setSize(680, 750);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
