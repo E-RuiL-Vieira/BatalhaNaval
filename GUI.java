@@ -94,7 +94,8 @@ public abstract class GUI extends JFrame {
     public Tabuleiro getTab() {
         return tab;
     }
-
+    
+    //Setter do tbuleiro
     public void setTab(Tabuleiro tab) {
         this.tab = tab;
     }

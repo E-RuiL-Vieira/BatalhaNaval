@@ -45,22 +45,30 @@ final class Jogo implements Serializable {
         String nomeP1 = JOptionPane.showInputDialog("Por favor insira seu nome");
         jogador = new Jogador (tab1, nomeP1);
         
-        //Posiciona navios automaticamente
-        //jogador.posicionarNavios();
+        //Escolha a forma de colocar os navios
+        Object[] poscionamento = {"Aleatorio", "Manual"};
+        Object reply3 = JOptionPane.showInputDialog(null, "Escolha a forma de colocar os navios", "Menu", JOptionPane.INFORMATION_MESSAGE, null, poscionamento, poscionamento[0]);
         
-       for (Navio n : jogador.getNavios()) {
-            colocarNavios colocarnavios = new colocarNavios(tab1, n);
-            synchronized(LOCK){
-                while(colocarnavios.estaEmUso()){
-                    try{LOCK.wait();}
-                    catch(InterruptedException e){break;}
+        //Posiciona os Navios de modo Aleatori e Automatico
+        if (reply3.equals("Aleatorio")){
+            jogador.posicionarNavios();
+        }
+        else{
+            //O Player Posiciona navios manualmente
+            for (Navio n : jogador.getNavios()) {
+                colocarNavios colocarnavios = new colocarNavios(tab1, n);
+                synchronized(LOCK){
+                    while(colocarnavios.estaEmUso()){
+                        try{LOCK.wait();}
+                        catch(InterruptedException e){break;}
+                    }
                 }
-            }
-            colocarnavios.dispose(); 
-       }
+                colocarnavios.dispose(); 
+           }
+        }
     }
-  
     
+    //Inicia o multiplayer, criando os sockets e conectando
     public void iniciarmultiplayer() throws IOException, ClassNotFoundException {
         Object reply2 = null;
         Object[] hostopcoes = {"Hostear", "Entrar"};
@@ -94,11 +102,14 @@ final class Jogo implements Serializable {
         if (multiplayer){
             if (jogador.isVezJogador()){ //Vez do Jogador
                 try {
-                    oponente = (Jogador)input.readObject();
-                    tab2 = oponente.getTab();
-                    Rodada oTab = new Rodada(true, tab2, jogador.getNome());
-                    while(oTab.estaEmUso()){
-                        esperar(10);
+                    oponente = (Jogador)input.readObject(); //Recebe da rede o Oponente
+                    tab2 = oponente.getTab(); //Tabuleiro do oponente
+                    Rodada oTab = new Rodada(true, tab2, jogador.getNome()); //Cria a tela para que o jogador possa atirar
+                    synchronized(LOCK){
+                        while(oTab.estaEmUso()){//Enquanto estiver em uso o usuario nao pode integarir com tabuleiro
+                            try{LOCK.wait();}
+                        catch(InterruptedException e){break;}
+                        }
                     }
                     oponente.setVezJogador(true);
                     jogador.setVezJogador(false);
@@ -120,7 +131,7 @@ final class Jogo implements Serializable {
                     jTab.setTab(jogador.getTab()); //Muda a janela para o novo tabuleiro recebido
                     jTab.atualizar(); // Atualiza a tela
                 } 
-                oponente = (Jogador)input.readObject(); //Recebe de 
+                oponente = (Jogador)input.readObject();
                 jogador.setVezJogador(true);
                 oponente.setVezJogador(false);
                 output.writeObject(oponente);
@@ -148,6 +159,7 @@ final class Jogo implements Serializable {
         }
     }
     
+    //Verifica se os navios foram destruidos
     public boolean verificarPartida(){
         if (multiplayer)
             return jogador.isVivo() && oponente.isVivo();
@@ -155,6 +167,7 @@ final class Jogo implements Serializable {
             return jogador.isVivo() && ai.isVivo();
     }
     
+    //Espera em ms para os player poderem visualizar o ocorrido
     public void esperar(int ms){
         try{
             Thread.sleep(ms);
@@ -165,11 +178,12 @@ final class Jogo implements Serializable {
     
     }
 
+    //Jogo multiplayer true or false
     public boolean isMultiplayer() {
         return multiplayer;
     }
     
-    
+    //Printa o usurio vencedor
     public void vitoria (){
         if (jogador.isVivo()){
             JOptionPane.showMessageDialog(null, jogador.getNome() + " venceu!", "FIM DO JOGO", JOptionPane.INFORMATION_MESSAGE);

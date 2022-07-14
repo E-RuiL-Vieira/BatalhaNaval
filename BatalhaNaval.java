@@ -10,16 +10,19 @@ public class BatalhaNaval {
 
     public static void main(String[] args) {
         try{
+            //Inicio do jogo
             Jogo jogo = new Jogo();
-            if (jogo.isMultiplayer()){
+            if (jogo.isMultiplayer()){//Caso Multiplayer
                 jogo.iniciarmultiplayer();
             }
-            else{
+            else{// Caso Singleplayer
                 jogo.iniciarsingleplayer();
             }
-            do {
+            do {// Inicia as jogadas dos jogadores até que a partida acabe
                 jogo.jogadas();
             } while (jogo.verificarPartida());
+            
+            //Verifica qual dos dois ganhou
             jogo.vitoria();
         } catch (Exception e){
         }

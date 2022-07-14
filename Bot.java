@@ -30,16 +30,14 @@ public final class Bot extends Jogador {
         Direcao novaDirecao;
         int x;
         int y;
-        if(c >= 5 || possiveis.isEmpty()){ 
-//Caso já se tenha dado 5 tiros numa mesma direção, ou já se tenha tentado todas as direções, resetamos todos os atributos e tentamos dar um tiro aleatório
+        if(c >= 5 || possiveis.isEmpty()){ //Caso já se tenha dado 5 tiros numa mesma direção, ou já se tenha tentado todas as direções, resetamos todos os atributos e tentamos dar um tiro aleatório
             c = 0;
             acertou = false;
             direcao = Direcao.VAZIO;
             possiveis.addAll(Arrays.asList(Arrays.copyOfRange(Direcao.values(), 0, 4)));
             return atirar(oTab);
         }
-        if (!acertou){ 
-//Caso o tiro anterior não tenha sido um acerto, dá-se um tiro aleatório
+        if (!acertou){ //Caso o tiro anterior não tenha sido um acerto, dá-se um tiro aleatório
             do{            
                 x = rand.nextInt(oTab.getX());
                 y = rand.nextInt(oTab.getY());}
@@ -54,8 +52,7 @@ public final class Bot extends Jogador {
             return false;
         }
         
-        if(direcao == Direcao.VAZIO){ 
-//Para chegar aqui, teríamos que ter acabado de dar um tiro certo, porém ainda não encontramos uma direção que contenha um navio
+        if(direcao == Direcao.VAZIO){ //Para chegar aqui, teríamos que ter acabado de dar um tiro certo, porém ainda não encontramos uma direção que contenha um navio
             do{
                 novaDirecao = possiveis.get(rand.nextInt(possiveis.size()));
                 x = ultimotiro[0]+novaDirecao.getX();

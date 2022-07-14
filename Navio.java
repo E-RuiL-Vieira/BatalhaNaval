@@ -21,12 +21,14 @@ public class Navio implements Serializable {
                 quadrados = new ArrayList();
     }
     
-    
+    //Cria cada tipo de navio com seu respectivo tamanho
     public enum TipoNavio implements Serializable {
      PORTAAVIOES(5), NAVIOTANQUE(4), CONTRATORPEDOS(3), SUBMARINO(2);
      private final int c;
     
-      TipoNavio(int c){ this.c = c; }
+      TipoNavio(int c){ 
+          this.c = c; 
+      }
       public int comprimento() { return c; }
     }
 
@@ -34,14 +36,10 @@ public class Navio implements Serializable {
         return tipo.comprimento();
     }
     
-    
-    
     public boolean verificarPosicionamento(){
         return !quadrados.isEmpty();
-    
     }
-    
-    
+
     public void criarNavio(int x, int y, Direcao direcao, Tabuleiro tab){
         this.posicaoX = x;
         this.posicaoY = y;
@@ -69,7 +67,5 @@ public class Navio implements Serializable {
     public String toString() {
         return "Navio{" + "posicaoX= " + posicaoX + ", posicaoY= " + posicaoY + ", tipo= " + tipo + '}';
     }
-    
-    
 }
     

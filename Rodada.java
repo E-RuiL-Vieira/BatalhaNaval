@@ -21,8 +21,8 @@ public class Rodada extends GUI{
     
     public Rodada(boolean vez, Tabuleiro tab, String titulo){
         super(tab);
-        this.vez = vez;
-        this.emuso = true;
+        this.vez = vez; 
+        this.emuso = true; //Se esta em uso, o usuario nao pode interagir
         ativarbotoes(vez); //Caso seja a vez do jogador, os botões serão clicáveis. Caso não seja, e ele esteja apenas assistindo, ele não poderá interagir com o tabuleiro.
         atualizar(); //Atualizamos o tabuleiro para que seja aplicado o override da função cor
         this.setTitle(titulo);
@@ -34,7 +34,7 @@ public class Rodada extends GUI{
             if (tab.podeAtirar(xCoord, yCoord)){ 
                 //Caso o botão seja passível de ser atirado, o tiro é feito.
                 tirodado(tab.getCasa(xCoord, yCoord).Alvo()); 
-                cor(xCoord, yCoord); 
+                cor(xCoord, yCoord);
                 ativarbotoes(false); //Como já acabou a rodada do jogador, os botões são desativados e o emuso é mudado para falso
                 emuso = false;
                 synchronized(Jogo.LOCK){
@@ -42,9 +42,10 @@ public class Rodada extends GUI{
                 }}
         };
         for (int i = 0; i < tab.getX(); i++){ //Acrescenta o listener dos botões para todos os botões
-            for (int j = 0; j < tab.getY(); j++){
-                    casas[i][j].addActionListener(ButtonListener); 
-        } }
+            for (int j = 0; j < tab.getY(); j++) {
+                casas[i][j].addActionListener(ButtonListener);
+            } 
+        }
         
         //Acrescenta texto abaixo do tabuleiro para informar ao jogador se é a vez dele ou do oponente
         constraints.gridx = 5;
@@ -92,7 +93,5 @@ public class Rodada extends GUI{
         else{
             JOptionPane.showMessageDialog(null, "Você errou o tiro", "Tiro", JOptionPane.INFORMATION_MESSAGE);
         }      
-    }
-    
-    
+    } 
 }

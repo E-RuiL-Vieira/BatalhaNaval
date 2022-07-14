@@ -11,17 +11,16 @@ import java.io.Serializable;
 public class Quadrado implements Serializable {
     private StatusQ status;
 
-
-    
     public Quadrado() {
         status = StatusQ.VAZIO;
     }
     
+    //Tipos de quadrado
     public enum StatusQ implements Serializable {
-     VAZIO, //Status padrão. Nada aconteceu com ele.
-     NAVIO, //Um navio foi colocado.
-     AFUNDADO,  //Anteriormente um navio, esse quadrado foi alvo de um tiro.
-     ERRADO //Esse quadrado também foi alvo de um tiro, porém ele estava vazio. 
+       VAZIO, //Status padrão. Nada aconteceu com ele.
+       NAVIO, //Um navio foi colocado.
+       AFUNDADO,  //Anteriormente um navio, esse quadrado foi alvo de um tiro.
+       ERRADO //Esse quadrado também foi alvo de um tiro, porém ele estava vazio. 
     }
     
     public boolean Alvo(){ //Esse método será chamado quando um jogador escolher este determinado quadrado como alvo de um tiro. Retornará verdadeiro caso o tiro acerte, retornará falso caso erre.

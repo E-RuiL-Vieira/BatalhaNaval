@@ -121,6 +121,7 @@ public class colocarNavios extends GUI{
         this.add(panel, BorderLayout.SOUTH);
     }
     
+    //Mostra onde o usuario está colocando o seu návio
     private void simularColocar(){
         if (tab.podeColocar(xCoord, yCoord, direcao, navio.getComprimento())){
             switch(direcao){
@@ -140,6 +141,7 @@ public class colocarNavios extends GUI{
         }
     }
     
+    //Efetivamente COloca o navio no lugar escolhido
     private void colocarNavio(){
         if (tab.podeColocar(xCoord, yCoord, direcao, navio.getComprimento())){
             navio.criarNavio(xCoord, yCoord, direcao, tab);

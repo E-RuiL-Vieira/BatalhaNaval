@@ -26,6 +26,4 @@ public enum Direcao {
     public int getY() {
         return y;
     }
-    
-    
 }
