@@ -4,12 +4,13 @@ Autores: Rui Emanuel Lima Viera - NUSP: 11810182
 */
 package com.mycompany.batalhanaval;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 
 //Essa classe é um template no qual serão baseados tanto o jogador dos usuários quando o Bot.
-public class Jogador {
+public class Jogador implements Serializable{
     protected Tabuleiro tab;
     protected final Random rand = new Random();
     protected ArrayList<Navio> navios; 

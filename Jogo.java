@@ -30,6 +30,7 @@ final class Jogo implements Serializable {
     
     public Jogo() throws IOException, ClassNotFoundException {
         host = false;
+        multiplayer = false;
         Object[] opcoes = {"Singleplayer", "Multiplayer"};
         Object reply = JOptionPane.showInputDialog(null, "Escolha um modo de jogo", "Menu", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
         if (reply.equals("Multiplayer")) {
@@ -43,54 +44,52 @@ final class Jogo implements Serializable {
         //Cria o objeto jogador do usuário
         String nomeP1 = JOptionPane.showInputDialog("Por favor insira seu nome");
         jogador = new Jogador (tab1, nomeP1);
-        //jogador.posicionarNavios(); //Posiciona navios automaticamente
-        
+        jogador.posicionarNavios(); //Posiciona navios automaticamente
+        /*
         for (Navio n : jogador.getNavios()) {
             colocarNavios colocarnavios = new colocarNavios(tab1, n);
             while(colocarnavios.estaEmUso());
             colocarnavios.dispose();
-        }
+        }*/
     }
   
     
-    public void iniciarmultiplayer(){
-            Object reply2 = null;
-            Object[] hostopcoes = {"Hostear", "Entrar"};
-            reply2 = JOptionPane.showInputDialog(null, "Hostear ou entrar", "Menu", JOptionPane.INFORMATION_MESSAGE, null, hostopcoes, hostopcoes[0]);
-            Socket socket;
-            if (reply2 == "Hostear") {// HOST
-                host = true;
-                vez = true;
-                ServerSocket server = new ServerSocket(1234);
-                while (true) {
-                    System.out.println("Aguardando conexões...");
-                    socket = server.accept();
-                    System.out.println("Conectado...");
+    public void iniciarmultiplayer() throws IOException, ClassNotFoundException {
+        Object reply2 = null;
+        Object[] hostopcoes = {"Hostear", "Entrar"};
+        reply2 = JOptionPane.showInputDialog(null, "Hostear ou entrar", "Menu", JOptionPane.INFORMATION_MESSAGE, null, hostopcoes, hostopcoes[0]);
+        Socket socket;
+        if (reply2 == "Hostear") {// HOST
+            host = true;
+            vez = true;
+            ServerSocket server = new ServerSocket(6666);
+            System.out.println("Aguardando conexões...");
+            socket = server.accept();
+            System.out.println("Conectado...");
 
-                    output = new ObjectOutputStream(socket.getOutputStream());
-                    input = new ObjectInputStream(socket.getInputStream());
-                }
-            }
-            else { // CLIENTE
-                host = false;
-                vez = false;
-                socket = new Socket("192.168.1.101", 1234);
-                output = new ObjectOutputStream(socket.getOutputStream());
-                input = new ObjectInputStream(socket.getInputStream());
-            }
-    
-    
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
+        }
+        else { // CLIENTE
+            host = false;
+            vez = false;
+            socket = new Socket("192.168.1.101", 6666);
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
+        }
     }
     
-    public void iniciarsingleplayer(){
+    public void iniciarsingleplayer() {
         ai = new Bot (tab2);
-        oponente = ai;
     }
     
-    public void jogadas() throws IOException, ClassNotFoundException{
+    public void jogadas() throws ClassNotFoundException, IOException {
         if (multiplayer){
             if (vez){
-                oponente = readJogador();
+                try {
+                    oponente = readJogador();
+                } catch (IOException e) {
+                }
                 tab2 = oponente.getTab();
                 Partida oTab = new Partida(true, tab2);
                 while(oTab.estaEmUso()); 
@@ -105,7 +104,6 @@ final class Jogo implements Serializable {
                 jTab.atualizar();
                 vez = true;
             }
-        
         }
         
         else{
@@ -123,7 +121,10 @@ final class Jogo implements Serializable {
     }
     
     public boolean verificarPartida(){
-        return jogador.isVivo() && oponente.isVivo();
+        if (multiplayer)
+            return jogador.isVivo() && oponente.isVivo();
+        else 
+            return jogador.isVivo() && ai.isVivo();
     }
     
     public void sendJogador (Jogador jogador) throws IOException, ClassNotFoundException {

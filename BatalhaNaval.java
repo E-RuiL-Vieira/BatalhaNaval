@@ -17,9 +17,9 @@ public class BatalhaNaval {
             else{
                 jogo.iniciarsingleplayer();
             }
-            while(jogo.verificarPartida()){
+            do {
                 jogo.jogadas();
-            }
+            } while (jogo.verificarPartida());
             jogo.vitoria();
         } catch (Exception e){
         }
