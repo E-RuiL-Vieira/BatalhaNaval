@@ -27,7 +27,7 @@ public abstract class GUI extends JFrame {
 
     
     public GUI(Tabuleiro tab){
-        this.setSize(680, 750);
+        this.setSize(700, 800);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
         oceano.setPreferredSize(new Dimension(650, 750));

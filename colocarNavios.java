@@ -4,6 +4,7 @@ Autores: Rui Emanuel Lima Viera - NUSP: 11810182
 */
 package com.mycompany.batalhanaval;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JLabel;
@@ -15,6 +16,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 
 
 
@@ -63,8 +65,8 @@ public class colocarNavios extends GUI{
         oceano.add(navioatual, constraints);
         
         //Botões para determinação da criação
-        Norte.setPreferredSize(new Dimension(50, 100));
-       Norte.setBorder(BorderFactory.createEtchedBorder(0));
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout(10, 10));
         Norte.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -74,10 +76,8 @@ public class colocarNavios extends GUI{
                 simularColocar();
             }
         });
-        constraints.gridx = 0; 
-        constraints.gridy = tab.getY() + 2;
-        
-        oceano.add(Norte, constraints);
+
+        panel.add(Norte, BorderLayout.NORTH);
         Sul.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -87,9 +87,7 @@ public class colocarNavios extends GUI{
                 simularColocar();
             }
         });
-        constraints.gridx = 2; 
-        constraints.gridy = tab.getY() + 2;
-        oceano.add(Sul, constraints);
+        panel.add(Sul, BorderLayout.SOUTH);
         Leste.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -99,8 +97,7 @@ public class colocarNavios extends GUI{
                 simularColocar();
             }
         });
-        constraints.gridx = 6; 
-        oceano.add(Leste, constraints);
+        panel.add(Leste, BorderLayout.EAST);
         Oeste.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -110,8 +107,7 @@ public class colocarNavios extends GUI{
                 simularColocar();
             }
         });
-        constraints.gridx = 4; 
-        oceano.add(Oeste, constraints);
+        panel.add(Oeste, BorderLayout.WEST);
         Enter.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -121,8 +117,8 @@ public class colocarNavios extends GUI{
                 }
             }
         });
-        constraints.gridx = 8; 
-        oceano.add(Enter, constraints);
+        panel.add(Enter, BorderLayout.CENTER);
+        this.add(panel, BorderLayout.SOUTH);
     }
     
     private void simularColocar(){
