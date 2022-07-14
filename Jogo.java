@@ -64,36 +64,56 @@ final class Jogo implements Serializable {
             vitoria(jogador, ai); //Verifica quem ganhou, e mostra. 
         }
         else { //Modo de jogo Multiplayer
-            if (reply2.equals("Hostear")) {
+            Socket socket;
+            if (reply2.equals("Hostear")) {// HOST
                 ServerSocket server = new ServerSocket(1234);
-                Socket socket = server.accept();
-                ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream()); //output
-                ObjectInputStream input = new ObjectInputStream(socket.getInputStream()); //input
-                tab1 = (Tabuleiro)input.readObject();
-                output.writeObject(tab1);
-                socket.close();
+                while (true) {
+                    System.out.println("Aguardando conexões...");
+                    socket = server.accept();
+                    System.out.println("Conectado...");
+
+                    ObjectOutputStream server_output = new ObjectOutputStream(socket.getOutputStream());
+                    ObjectInputStream server_input = new ObjectInputStream(socket.getInputStream());
+                }
             }
-            else {
-                Socket socket = new Socket("192.168.1.101", 1234);
-                ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream()); //output
-                ObjectInputStream input = new ObjectInputStream(socket.getInputStream()); //input
-                output.writeObject(tab2);
-                tab2 = (Tabuleiro)input.readObject();
-                output.close();
-                socket.close();
+            else { // CLIENTE
+                socket = new Socket("192.168.1.101", 1234);
+                ObjectOutputStream cliente_output = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream cliente_input = new ObjectInputStream(socket.getInputStream());
             }
             //Criando jogado2
-            String nomeP2 = JOptionPane.showInputDialog("Por favor insira seu nome");
-            Jogador jogador2 = new Jogador (tab2, nomeP2);
-            Partida oTab = new Partida(true, tab2);
+            oponente = new Jogador (tab2, "Player2");
              
-            
             //Jogo entre jogadores
-            oTab = new Partida(true, tab2);
-            while(oTab.estaEmUso());
-            vitoria(jogador, jogador2); //Verifica vencedor. 
-            oTab.dispose();
+            while(jogador.isVivo() && oponente.isVivo()){ //O jogo continua até pelo menos um dos jogadores morrer
+                //Jogada p1
+                Partida oTab = new Partida(true, tab2);
+                while(oTab.estaEmUso()); //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
+                esperar(3000); //Pausa para que o usuário analise o tabuleiro
+                oTab.dispose();
+                
+                //jogada p2
+                Partida jTab = new Partida(false, tab1);
+                while(oTab.estaEmUso()); //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
+                esperar(3000); //Pausa para que o usuário analise o tabuleiro
+                jTab.dispose();
+            }
+            //input.close();
+            //output.close();
+            socket.close();
+            vitoria(jogador, oponente); //Verifica quem ganhou, e mostra. 
         }
+    }
+    
+    
+    public void sendInfo (ObjectOutputStream output, ObjectInputStream input, Tabuleiro tab) throws IOException, ClassNotFoundException {
+        tab = (Tabuleiro)input.readObject();
+        output.writeObject(tab);
+    }
+    
+    public void readInfo(ObjectOutputStream output, ObjectInputStream input, Tabuleiro tab) throws IOException, ClassNotFoundException {
+        output.writeObject(tab);
+        tab = (Tabuleiro)input.readObject();
     }
     
     public void esperar(int ms){
