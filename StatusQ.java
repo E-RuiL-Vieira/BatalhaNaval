@@ -6,7 +6,10 @@ Autores: Rui Emanuel Lima Viera - NUSP: 11810182
 package com.mycompany.batalhanaval;
 
 //Responsável por determinar como está um objeto da classe Quadrado
-public enum StatusQ {
+
+import java.io.Serializable;
+
+public enum StatusQ implements Serializable {
     VAZIO, //Status padrão. Nada aconteceu com ele.
     NAVIO, //Um navio foi colocado.
     AFUNDADO,  //Anteriormente um navio, esse quadrado foi alvo de um tiro.

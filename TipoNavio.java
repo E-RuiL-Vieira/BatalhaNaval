@@ -5,7 +5,10 @@ Autores: Rui Emanuel Lima Viera - NUSP: 11810182
 package com.mycompany.batalhanaval;
 
 //Responsável por determinar qual o tipo do navio, seguindo o especificado no enunciado do trabalho.
-public enum TipoNavio {
+
+import java.io.Serializable;
+
+public enum TipoNavio implements Serializable {
     PORTAAVIOES(5), NAVIOTANQUE(4), CONTRATORPEDOS(3), SUBMARINO(2);
     private final int c;
     

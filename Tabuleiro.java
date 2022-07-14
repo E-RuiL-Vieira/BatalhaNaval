@@ -4,11 +4,12 @@ Autores: Rui Emanuel Lima Viera - NUSP: 11810182
 */
 package com.mycompany.batalhanaval;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 //Essa classe é responsável pelo tabuleiro do jogo em si, desconsiderando a parte gŕafica (que é atribuição da classe Oceano). 
-public class Tabuleiro {
+public class Tabuleiro implements Serializable {
     private final int x; //Tamanho horizontal do tabuleiro
     private final int y; //Tamanho vertical do tabuleiro
     private Quadrado[][] oceano;

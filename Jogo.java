@@ -59,6 +59,7 @@ final class Jogo implements Serializable {
         Object[] hostopcoes = {"Hostear", "Entrar"};
         reply2 = JOptionPane.showInputDialog(null, "Hostear ou entrar", "Menu", JOptionPane.INFORMATION_MESSAGE, null, hostopcoes, hostopcoes[0]);
         Socket socket;
+        vez = true;
         if (reply2.equals("Hostear")) {// HOST
             host = true;
             vez = true;
@@ -84,22 +85,37 @@ final class Jogo implements Serializable {
     
     public void jogadas() throws ClassNotFoundException, IOException {
         if (multiplayer){
-            if (vez){
-                oponente = readJogador();
-                System.out.println("test");
-                tab2 = oponente.getTab();
-                Partida oTab = new Partida(true, tab2);
-                while(oTab.estaEmUso()); 
-                sendJogador(oponente);
-                vez = false;
+            System.out.println("BBB");
+            if (vez){ //Vez do Jogador
+                try {
+                    System.out.println("test");
+                    oponente = (Jogador)input.readObject();
+                    System.out.println("t1");
+                    tab2 = oponente.getTab();
+                    Partida oTab = new Partida(true, tab2);
+                    while(oTab.estaEmUso());
+                    output.writeObject(jogador); //Envia dados
+                    output.flush();
+                    vez = false;
+                    jogador.setVezJogador(false);
+                    oponente.setVezJogador(true);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
             }
-            else{
+            else{ // Vez do oponente
                 Partida jTab = new Partida(false, tab1);
-                sendJogador(jogador); 
-                //espera o oponente 
-                jogador = readJogador();
-                jTab.atualizar();
-                vez = true;
+                output.writeObject(jogador);
+                output.flush();
+                System.out.println("AA");
+                while (jogador.isVezJogador() == false) {
+                    //Espera até que a vez do oponente termina
+                    jogador = (Jogador)input.readObject();
+                    jTab.atualizar();
+                    vez = true;
+                }
+                jogador.setVezJogador(true);
+                oponente.setVezJogador(false);
             }
         }
         
@@ -121,15 +137,6 @@ final class Jogo implements Serializable {
             return jogador.isVivo() && oponente.isVivo();
         else 
             return jogador.isVivo() && ai.isVivo();
-    }
-    
-    public void sendJogador (Jogador jogador) throws IOException, ClassNotFoundException {
-        output.writeObject(jogador);
-        output.flush();
-    }
-    
-    public Jogador readJogador() throws IOException, ClassNotFoundException {
-        return (Jogador)input.readObject();
     }
     
     public void esperar(int ms){

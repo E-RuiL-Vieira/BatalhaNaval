@@ -15,6 +15,7 @@ public class Jogador implements Serializable{
     protected final Random rand = new Random();
     protected ArrayList<Navio> navios; 
     protected String nome;
+    protected boolean vezJogador;
     
     public Jogador(Tabuleiro tab, String nome){
         navios = new ArrayList();
@@ -60,6 +61,14 @@ public class Jogador implements Serializable{
         for(Navio i : navios){
             posicionarNavio(i);
         }
+    }
+
+    public boolean isVezJogador() {
+        return vezJogador;
+    }
+
+    public void setVezJogador(boolean vezJogador) {
+        this.vezJogador = vezJogador;
     }
     
     //Esse método é responsável por posicionar um navio de maneira aleatória no tabuleiro.

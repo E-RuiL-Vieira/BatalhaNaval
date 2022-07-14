@@ -5,7 +5,10 @@ Autores: Rui Emanuel Lima Viera - NUSP: 11810182
 package com.mycompany.batalhanaval;
 
 //O objetivo desse objeto é compor o tabuleiro. Seu único atributo é o status, feito do enum StatusQ. Ele informa sobre o status daquela casa específica do tabuleiro. 
-public class Quadrado {
+
+import java.io.Serializable;
+
+public class Quadrado implements Serializable {
     private StatusQ status;
 
 
