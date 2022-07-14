@@ -44,13 +44,13 @@ final class Jogo implements Serializable {
         //Cria o objeto jogador do usuário
         String nomeP1 = JOptionPane.showInputDialog("Por favor insira seu nome");
         jogador = new Jogador (tab1, nomeP1);
-        jogador.posicionarNavios(); //Posiciona navios automaticamente
-        /*
+        //jogador.posicionarNavios(); //Posiciona navios automaticamente
+        
         for (Navio n : jogador.getNavios()) {
             colocarNavios colocarnavios = new colocarNavios(tab1, n);
             while(colocarnavios.estaEmUso());
             colocarnavios.dispose();
-        }*/
+        }
     }
   
     
@@ -85,51 +85,63 @@ final class Jogo implements Serializable {
     
     public void jogadas() throws ClassNotFoundException, IOException {
         if (multiplayer){
-            System.out.println("BBB");
             if (vez){ //Vez do Jogador
                 try {
-                    System.out.println("test");
+                    System.out.println("if");
                     oponente = (Jogador)input.readObject();
-                    System.out.println("t1");
                     tab2 = oponente.getTab();
+                    System.out.println("While");
                     Partida oTab = new Partida(true, tab2);
                     while(oTab.estaEmUso());
+                    System.out.println("Comeco envio");
                     output.writeObject(jogador); //Envia dados
-                    output.flush();
+                    System.out.println("Fim envio ddos");
                     vez = false;
                     jogador.setVezJogador(false);
                     oponente.setVezJogador(true);
+                    oTab.dispose();
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
+                output.writeObject(jogador); //Envia dados
+                output.flush();
             }
             else{ // Vez do oponente
                 Partida jTab = new Partida(false, tab1);
                 output.writeObject(jogador);
                 output.flush();
-                System.out.println("AA");
+                System.out.println("else");
                 while (jogador.isVezJogador() == false) {
-                    //Espera até que a vez do oponente termina
+                    System.out.println("Preso no loop");
+                    //Espera até que a vez do oponente termine
                     jogador = (Jogador)input.readObject();
+                    jTab.setTab(jogador.getTab());
                     jTab.atualizar();
                     vez = true;
                 }
                 jogador.setVezJogador(true);
                 oponente.setVezJogador(false);
+                output.writeObject(jogador); //Envia dados
+                output.flush();
+                jTab.atualizar();
+                esperar(2000);
+                jTab.dispose();
+                System.out.println("Fim else");
             }
         }
         
         else{
             Partida oTab = new Partida(true, tab2);
             while(oTab.estaEmUso()); //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
-            esperar(5000); //Pausa para que o usuário analise o tabuleiro
+            esperar(2000); //Pausa para que o usuário analise o tabuleiro
             oTab.dispose();
             Partida jTab = new Partida(false, tab1);
-            esperar(5000); //Pausa dramática
+            esperar(2000); //Pausa dramática
             jTab.tirodadooponente(ai.atirar(tab1)); //Jogada do bot é feita
-            esperar(3000); //Pausa para que o usuário analise o tabuleiro
+            esperar(2000); //Pausa para que o usuário analise o tabuleiro
             jTab.dispose();
         }
+        System.out.println("Fim jogdds");
     }
     
     public boolean verificarPartida(){

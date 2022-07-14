@@ -91,6 +91,15 @@ public abstract class Oceano extends JFrame {
             }
         }
     }
+
+    public Tabuleiro getTab() {
+        return tab;
+    }
+
+    public void setTab(Tabuleiro tab) {
+        this.tab = tab;
+    }
+    
     
     //Determina a cor do botão determinado, a depender do estado do seu respectivo quadrado
     protected void cor(int i, int j){

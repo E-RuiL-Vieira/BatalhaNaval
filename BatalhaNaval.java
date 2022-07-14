@@ -19,6 +19,7 @@ public class BatalhaNaval {
             }
             do {
                 jogo.jogadas();
+                System.out.println("Loop min");
             } while (jogo.verificarPartida());
             jogo.vitoria();
         } catch (Exception e){

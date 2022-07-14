@@ -39,9 +39,9 @@ public class Tabuleiro implements Serializable {
     
     
     public boolean podeColocar(int x, int y, Direcao direcao, int comprimento){
-        //Essa função é responsável por determinar se um navio pode ser colocado neste tabuleiro. Seus parâmetros são apenas os detalhes necessários.
+        //Essa função é responsável por determinar se um navio pode ser colocado neste tabuleiro. Seus parâmetros são apenas os detalhes necessários
         if (direcao == Direcao.NORTE || direcao == Direcao.SUL) {
-            int y2 =  y + (direcao.getY() * comprimento); //Coordenadas da poupa do navio
+            int y2 =  y + (direcao.getY() * comprimento) - direcao.getY(); //Coordenadas da poupa do navio
                 if (y2 >= this.y || y2 < 0){ //Caso a poupa do navio ultrapasse os limites do tabuleiro, ele não pode ser colocado neste tabuleiro. 
                     return false;
                 }
@@ -52,7 +52,7 @@ public class Tabuleiro implements Serializable {
             }   
         }
         else if (direcao == Direcao.LESTE || direcao == Direcao.OESTE) {
-            int x2 = x + (direcao.getX() * comprimento); //Coordenadas da poupa do navio
+            int x2 = x + (direcao.getX() * comprimento) - direcao.getX(); //Coordenadas da poupa do navio
             if (x2 >= this.x || x2 < 0 ) { //Caso a poupa do navio ultrapasse os limites do tabuleiro, ele não pode ser colocado neste tabuleiro.
                 return false;
             }
