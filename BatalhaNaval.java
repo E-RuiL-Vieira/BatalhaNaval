@@ -11,13 +11,18 @@ public class BatalhaNaval {
     public static void main(String[] args) {
         try{
             Jogo jogo = new Jogo();
+            if (jogo.isMultiplayer()){
+                jogo.iniciarmultiplayer();
+            }
+            else{
+                jogo.iniciarsingleplayer();
+            }
+            while(jogo.verificarPartida()){
+                jogo.jogadas();
+            }
+            jogo.vitoria();
         } catch (Exception e){
         }
-        /*Tabuleiro tab1 = new Tabuleiro(10, 10);
-        Bot bot = new Bot(tab1);
-        Oceano tela = new Oceano(false, tab1);
-        for (Navio i : bot.getNavios()){
-            System.out.println(i);
-        }*/
+
     }
 }

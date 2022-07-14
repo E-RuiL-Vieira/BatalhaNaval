@@ -17,25 +17,28 @@ import javax.swing.JOptionPane;
 
 //Classe principal, onde o jogo será rodado.
 final class Jogo implements Serializable {
-    Jogador jogador;
-    Jogador oponente;
-    Bot ai;
-    Tabuleiro tab1;
-    Tabuleiro tab2;
+    private Jogador jogador;
+    private Jogador oponente;
+    private Bot ai;
+    private Tabuleiro tab1;
+    private Tabuleiro tab2;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
+    private boolean multiplayer;
+    private boolean host;
+    private boolean vez;
     
     public Jogo() throws IOException, ClassNotFoundException {
-        Object reply2 = null;
+        host = false;
         Object[] opcoes = {"Singleplayer", "Multiplayer"};
         Object reply = JOptionPane.showInputDialog(null, "Escolha um modo de jogo", "Menu", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
         if (reply.equals("Multiplayer")) {
-            Object[] host = {"Hostear", "Entrar"};
-            reply2 = JOptionPane.showInputDialog(null, "Hostear ou entrar", "Menu", JOptionPane.INFORMATION_MESSAGE, null, host, host[0]);
+            multiplayer = true;    
         }
  
         
         //Cria tabuleiro para os dois jogadores
         tab1 = new Tabuleiro (10, 10);
-        tab2 = new Tabuleiro (10, 10);
         
         //Cria o objeto jogador do usuário
         String nomeP1 = JOptionPane.showInputDialog("Por favor insira seu nome");
@@ -47,73 +50,90 @@ final class Jogo implements Serializable {
             while(colocarnavios.estaEmUso());
             colocarnavios.dispose();
         }
-        
-        if (reply.equals("Singleplayer")) { //Caso o selecionado será o modo singleplayer, o usuário jogará contra um computador.
-            ai = new Bot (tab2);
-            while(jogador.isVivo() && ai.isVivo()){ //O jogo continua até pelo menos um dos jogadores morrer
-                Partida oTab = new Partida(true, tab2);
-                while(oTab.estaEmUso()); //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
-                esperar(5000); //Pausa para que o usuário analise o tabuleiro
-                oTab.dispose();
-                Partida jTab = new Partida(false, tab1);
-                esperar(5000); //Pausa dramática
-                jTab.tirodadooponente(ai.atirar(tab1)); //Jogada do bot é feita
-                esperar(3000); //Pausa para que o usuário analise o tabuleiro
-                jTab.dispose();
-            }
-            vitoria(jogador, ai); //Verifica quem ganhou, e mostra. 
-        }
-        else { //Modo de jogo Multiplayer
+    }
+  
+    
+    public void iniciarmultiplayer(){
+            Object reply2 = null;
+            Object[] hostopcoes = {"Hostear", "Entrar"};
+            reply2 = JOptionPane.showInputDialog(null, "Hostear ou entrar", "Menu", JOptionPane.INFORMATION_MESSAGE, null, hostopcoes, hostopcoes[0]);
             Socket socket;
-            if (reply2.equals("Hostear")) {// HOST
+            if (reply2 == "Hostear") {// HOST
+                host = true;
+                vez = true;
                 ServerSocket server = new ServerSocket(1234);
                 while (true) {
                     System.out.println("Aguardando conexões...");
                     socket = server.accept();
                     System.out.println("Conectado...");
 
-                    ObjectOutputStream server_output = new ObjectOutputStream(socket.getOutputStream());
-                    ObjectInputStream server_input = new ObjectInputStream(socket.getInputStream());
+                    output = new ObjectOutputStream(socket.getOutputStream());
+                    input = new ObjectInputStream(socket.getInputStream());
                 }
             }
             else { // CLIENTE
+                host = false;
+                vez = false;
                 socket = new Socket("192.168.1.101", 1234);
-                ObjectOutputStream cliente_output = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream cliente_input = new ObjectInputStream(socket.getInputStream());
+                output = new ObjectOutputStream(socket.getOutputStream());
+                input = new ObjectInputStream(socket.getInputStream());
             }
-            //Criando jogado2
-            oponente = new Jogador (tab2, "Player2");
-             
-            //Jogo entre jogadores
-            while(jogador.isVivo() && oponente.isVivo()){ //O jogo continua até pelo menos um dos jogadores morrer
-                //Jogada p1
-                Partida oTab = new Partida(true, tab2);
-                while(oTab.estaEmUso()); //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
-                esperar(3000); //Pausa para que o usuário analise o tabuleiro
-                oTab.dispose();
-                
-                //jogada p2
-                Partida jTab = new Partida(false, tab1);
-                while(oTab.estaEmUso()); //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
-                esperar(3000); //Pausa para que o usuário analise o tabuleiro
-                jTab.dispose();
+    
+    
+    }
+    
+    public void iniciarsingleplayer(){
+        ai = new Bot (tab2);
+        oponente = ai;
+    }
+    
+    public void jogadas() throws IOException, ClassNotFoundException{
+        if (multiplayer){
+           
+            if (vez){
+            oponente = readJogador();
+            tab2 = oponente.getTab();
+            Partida oTab = new Partida(true, tab2);
+            while(oTab.estaEmUso()); 
+            sendJogador(oponente);
+            vez = false;
             }
-            //input.close();
-            //output.close();
-            socket.close();
-            vitoria(jogador, oponente); //Verifica quem ganhou, e mostra. 
+            else{
+            sendJogador(jogador); 
+            //jogador 
+            jogador = readJogador();
+            vez = true;
+            }
+            
+           
+        
         }
+        
+        else{
+            Partida oTab = new Partida(true, tab2);
+            while(oTab.estaEmUso()); //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
+            esperar(5000); //Pausa para que o usuário analise o tabuleiro
+            oTab.dispose();
+            Partida jTab = new Partida(false, tab1);
+            esperar(5000); //Pausa dramática
+            jTab.tirodadooponente(ai.atirar(tab1)); //Jogada do bot é feita
+            esperar(3000); //Pausa para que o usuário analise o tabuleiro
+            jTab.dispose();
+        }
+    
     }
     
-    
-    public void sendInfo (ObjectOutputStream output, ObjectInputStream input, Tabuleiro tab) throws IOException, ClassNotFoundException {
-        tab = (Tabuleiro)input.readObject();
-        output.writeObject(tab);
+    public boolean verificarPartida(){
+        return jogador.isVivo() && oponente.isVivo();
     }
     
-    public void readInfo(ObjectOutputStream output, ObjectInputStream input, Tabuleiro tab) throws IOException, ClassNotFoundException {
-        output.writeObject(tab);
-        tab = (Tabuleiro)input.readObject();
+    public void sendJogador (Jogador jogador) throws IOException, ClassNotFoundException {
+        output.writeObject(jogador);
+        output.flush();
+    }
+    
+    public Jogador readJogador() throws IOException, ClassNotFoundException {
+        return (Jogador)input.readObject();
     }
     
     public void esperar(int ms){
@@ -125,8 +145,13 @@ final class Jogo implements Serializable {
         }
     
     }
+
+    public boolean isMultiplayer() {
+        return multiplayer;
+    }
     
-    public void vitoria (Jogador jogador, Jogador oponente){
+    
+    public void vitoria (){
         JLabel texto;
         if (jogador.isVivo()){
             texto = new JLabel(jogador.getNome() + " venceu!");
