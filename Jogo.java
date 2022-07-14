@@ -86,6 +86,7 @@ final class Jogo implements Serializable {
         if (multiplayer){
             if (vez){
                 oponente = readJogador();
+                System.out.println("test");
                 tab2 = oponente.getTab();
                 Partida oTab = new Partida(true, tab2);
                 while(oTab.estaEmUso()); 
