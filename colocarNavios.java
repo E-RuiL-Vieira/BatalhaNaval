@@ -100,7 +100,7 @@ public class colocarNavios extends Oceano{
             }
         });
         oceano.add(Enter, constraints);
-        
+        /*
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,7 +129,7 @@ public class colocarNavios extends Oceano{
                     .addComponent(Oeste)
                     .addComponent(Enter))
                 .addGap(8, 8, 8))
-        );
+        );*/
     }
     
     private void colocarNavio(){

@@ -36,10 +36,10 @@ final class Jogo implements Serializable {
         if (reply.equals("Multiplayer")) {
             multiplayer = true;    
         }
- 
         
         //Cria tabuleiro para os dois jogadores
         tab1 = new Tabuleiro (10, 10);
+        tab2 = new Tabuleiro (10, 10);
         
         //Cria o objeto jogador do usuário
         String nomeP1 = JOptionPane.showInputDialog("Por favor insira seu nome");
@@ -59,21 +59,20 @@ final class Jogo implements Serializable {
         Object[] hostopcoes = {"Hostear", "Entrar"};
         reply2 = JOptionPane.showInputDialog(null, "Hostear ou entrar", "Menu", JOptionPane.INFORMATION_MESSAGE, null, hostopcoes, hostopcoes[0]);
         Socket socket;
-        if (reply2 == "Hostear") {// HOST
+        if (reply2.equals("Hostear")) {// HOST
             host = true;
             vez = true;
-            ServerSocket server = new ServerSocket(6666);
+            ServerSocket server = new ServerSocket(1234);
             System.out.println("Aguardando conexões...");
             socket = server.accept();
             System.out.println("Conectado...");
-
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
         }
         else { // CLIENTE
             host = false;
             vez = false;
-            socket = new Socket("192.168.1.101", 6666);
+            socket = new Socket("192.168.1.101", 1234);
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
         }
@@ -86,10 +85,7 @@ final class Jogo implements Serializable {
     public void jogadas() throws ClassNotFoundException, IOException {
         if (multiplayer){
             if (vez){
-                try {
-                    oponente = readJogador();
-                } catch (IOException e) {
-                }
+                oponente = readJogador();
                 tab2 = oponente.getTab();
                 Partida oTab = new Partida(true, tab2);
                 while(oTab.estaEmUso()); 
@@ -117,7 +113,6 @@ final class Jogo implements Serializable {
             esperar(3000); //Pausa para que o usuário analise o tabuleiro
             jTab.dispose();
         }
-    
     }
     
     public boolean verificarPartida(){
