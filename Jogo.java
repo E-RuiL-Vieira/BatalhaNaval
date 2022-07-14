@@ -39,19 +39,20 @@ final class Jogo implements Serializable {
         
         //Cria tabuleiro para os dois jogadores
         tab1 = new Tabuleiro (10, 10);
-        tab2 = new Tabuleiro (10, 10);
         
         //Cria o objeto jogador do usuário
         String nomeP1 = JOptionPane.showInputDialog("Por favor insira seu nome");
         jogador = new Jogador (tab1, nomeP1);
-        jogador.posicionarNavios(); //Posiciona navios automaticamente
-        /*
+        //jogador.posicionarNavios(); //Posiciona navios automaticamente
+        
         for (Navio n : jogador.getNavios()) {
             colocarNavios colocarnavios = new colocarNavios(tab1, n);
-            while(colocarnavios.estaEmUso());
+            while(colocarnavios.estaEmUso()){
+                esperar(10);
+            }
             colocarnavios.dispose();
         }
-        */
+        
     }
   
     
@@ -80,6 +81,7 @@ final class Jogo implements Serializable {
     }
     
     public void iniciarsingleplayer() {
+        tab2 = new Tabuleiro (10, 10);
         ai = new Bot (tab2);
     }
     
@@ -93,11 +95,9 @@ final class Jogo implements Serializable {
                     while(oTab.estaEmUso()){
                         esperar(10);
                     }
-                    System.out.println("Comeco envio");
                     oponente.setVezJogador(true);
                     jogador.setVezJogador(false);
                     output.writeObject(oponente); //Envia dados
-                    System.out.println("Fim envio ddos");
                     oTab.dispose();
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
@@ -126,7 +126,7 @@ final class Jogo implements Serializable {
         }
         
         else{
-            Partida oTab = new Partida(true, tab1, jogador.getNome());
+            Partida oTab = new Partida(true, tab2, jogador.getNome());
             while(oTab.estaEmUso()){
                 esperar(10);
             } //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
