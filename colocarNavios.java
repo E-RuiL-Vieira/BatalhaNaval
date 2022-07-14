@@ -39,6 +39,7 @@ public class colocarNavios extends Oceano{
             xCoord = Character.getNumericValue(e.getActionCommand().charAt(0));
             yCoord = Character.getNumericValue(e.getActionCommand().charAt(1)); 
             casas[xCoord][yCoord].setBackground(Color.WHITE); //Muda o botão clicado para branco
+            simularColocar();
         };
         
         //Acrescenta o button listener para todos os botões
@@ -63,6 +64,7 @@ public class colocarNavios extends Oceano{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 direcao = Direcao.NORTE;
+                simularColocar();
             }
         });
         oceano.add(Norte, constraints);
@@ -71,22 +73,25 @@ public class colocarNavios extends Oceano{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 direcao = Direcao.SUL;
+                simularColocar();
             }
         });
         oceano.add(Sul, constraints);
-        constraints.gridx = 5; 
+        constraints.gridx = 7; 
         Leste.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
                 direcao = Direcao.LESTE;
+                simularColocar();
             }
         });
         oceano.add(Leste, constraints);
-        constraints.gridx = 7; 
+        constraints.gridx = 5; 
         Oeste.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
                 direcao = Direcao.OESTE;
+                simularColocar();
             }
         });
         oceano.add(Oeste, constraints);
@@ -130,6 +135,25 @@ public class colocarNavios extends Oceano{
                     .addComponent(Enter))
                 .addGap(8, 8, 8))
         );*/
+    }
+    
+    private void simularColocar(){
+        if (tab.podeColocar(xCoord, yCoord, direcao, navio.getComprimento())){
+            switch(direcao){
+            case NORTE, SUL->{ //Casos verticais
+                int y2 = yCoord + (direcao.getY() *navio.getComprimento()); //Coordenada da poupa do navio
+                    for(int j = yCoord; j != y2; j=j+direcao.getY()){ //Itera por todos os quadrados do navio que está sendo criado
+                        casas[xCoord][j].setBackground(Color.WHITE); //Muda os botões correspondentes para branco
+                    }
+                }
+            case OESTE, LESTE->{ //Casos horizontais
+                int x2 = xCoord + (direcao.getX() * navio.getComprimento()); //Coordenada da poupa do navio
+                for(int i = xCoord; i != x2; i=i+direcao.getX()){ //Itera por todos os quadrados do navio que está sendo criado
+                    casas[i][yCoord].setBackground(Color.WHITE); //Muda os botões correspondentes para branco
+                }
+            }
+        }
+        }
     }
     
     private void colocarNavio(){
