@@ -13,13 +13,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 //Essa classe é responsável pela interface que é exibida para o usuário durante uma rodada. 
-public class Partida extends Oceano{
+public class Rodada extends GUI{
     private boolean vez; 
     private JLabel textovez;
     private ActionListener ButtonListener;
 
     
-    public Partida(boolean vez, Tabuleiro tab, String titulo){
+    public Rodada(boolean vez, Tabuleiro tab, String titulo){
         super(tab);
         this.vez = vez;
         this.emuso = true;
@@ -76,8 +76,8 @@ public class Partida extends Oceano{
     @Override
     protected void cor(int i, int j){
         super.cor(i,j);
-        StatusQ status = tab.getCasa(i, j).getStatus();
-        if(status == StatusQ.NAVIO){ //Caso seja a vez do jogador de jogar, queremos que os quadrados do navio do inimigo fiquem da mesma cor que o oceano. Caso não seja, os navios podem ter a cor normal.
+        Quadrado.StatusQ status = tab.getCasa(i, j).getStatus();
+        if(status == Quadrado.StatusQ.NAVIO){ //Caso seja a vez do jogador de jogar, queremos que os quadrados do navio do inimigo fiquem da mesma cor que o oceano. Caso não seja, os navios podem ter a cor normal.
             if(vez){
                 casas[i][j].setBackground(Color.CYAN);
             }

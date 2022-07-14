@@ -20,6 +20,15 @@ public class Navio implements Serializable {
                 this.tipo = tipo;
                 quadrados = new ArrayList();
     }
+    
+    
+    public enum TipoNavio implements Serializable {
+     PORTAAVIOES(5), NAVIOTANQUE(4), CONTRATORPEDOS(3), SUBMARINO(2);
+     private final int c;
+    
+      TipoNavio(int c){ this.c = c; }
+      public int comprimento() { return c; }
+    }
 
     public int getComprimento() {
         return tipo.comprimento();
@@ -44,7 +53,7 @@ public class Navio implements Serializable {
             return true;
         }
         for (Quadrado i : quadrados){
-            if (i.getStatus() == StatusQ.NAVIO){ //Se houver pelo menos um quadrado que compõe o navio que esteja ainda como navio, o navio ainda não foi completamente afundado.
+            if (i.isNavio()){ //Se houver pelo menos um quadrado que compõe o navio que esteja ainda como navio, o navio ainda não foi completamente afundado.
                return false;
             }
         }//Caso contrário, o navio realmente foi afundado.

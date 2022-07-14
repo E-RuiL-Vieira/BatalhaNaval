@@ -22,16 +22,16 @@ public class Jogador implements Serializable{
         this.tab = tab;
         this.nome = nome;
         //1 porta aviões, 2 navio tanque, 3 contra torpedos e 4 submarinos
-        /*        this.navios.add(new Navio(TipoNavio.PORTAAVIOES));
-        this.navios.add(new Navio(TipoNavio.NAVIOTANQUE));
-        this.navios.add(new Navio(TipoNavio.NAVIOTANQUE));
-        this.navios.add(new Navio(TipoNavio.CONTRATORPEDOS));
-        this.navios.add(new Navio(TipoNavio.CONTRATORPEDOS));
-        this.navios.add(new Navio(TipoNavio.CONTRATORPEDOS));*/
-        this.navios.add(new Navio(TipoNavio.SUBMARINO));
-        this.navios.add(new Navio(TipoNavio.SUBMARINO));
-        this.navios.add(new Navio(TipoNavio.SUBMARINO));
-        this.navios.add(new Navio(TipoNavio.SUBMARINO));
+        /*        this.navios.add(new Navio(Navio.TipoNavio.PORTAAVIOES));
+        this.navios.add(new Navio(Navio.TipoNavio.NAVIOTANQUE));
+        this.navios.add(new Navio(Navio.TipoNavio.NAVIOTANQUE));
+        this.navios.add(new Navio(Navio.TipoNavio.CONTRATORPEDOS));
+        this.navios.add(new Navio(Navio.TipoNavio.CONTRATORPEDOS));
+        this.navios.add(new Navio(Navio.TipoNavio.CONTRATORPEDOS));*/
+        /*        this.navios.add(new Navio(Navio.TipoNavio.SUBMARINO));
+        this.navios.add(new Navio(Navio.TipoNavio.SUBMARINO));
+        this.navios.add(new Navio(Navio.TipoNavio.SUBMARINO));*/
+        this.navios.add(new Navio(Navio.TipoNavio.SUBMARINO));
 
     }
     

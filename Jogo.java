@@ -44,9 +44,11 @@ final class Jogo implements Serializable {
         //Cria o objeto jogador do usuário
         String nomeP1 = JOptionPane.showInputDialog("Por favor insira seu nome");
         jogador = new Jogador (tab1, nomeP1);
-        //jogador.posicionarNavios(); //Posiciona navios automaticamente
         
-        for (Navio n : jogador.getNavios()) {
+        //Posiciona navios automaticamente
+        //jogador.posicionarNavios();
+        
+       for (Navio n : jogador.getNavios()) {
             colocarNavios colocarnavios = new colocarNavios(tab1, n);
             synchronized(LOCK){
                 while(colocarnavios.estaEmUso()){
@@ -54,9 +56,8 @@ final class Jogo implements Serializable {
                     catch(InterruptedException e){break;}
                 }
             }
-            colocarnavios.dispose();
-        }
-        
+            colocarnavios.dispose(); 
+       }
     }
   
     
@@ -95,7 +96,7 @@ final class Jogo implements Serializable {
                 try {
                     oponente = (Jogador)input.readObject();
                     tab2 = oponente.getTab();
-                    Partida oTab = new Partida(true, tab2, jogador.getNome());
+                    Rodada oTab = new Rodada(true, tab2, jogador.getNome());
                     while(oTab.estaEmUso()){
                         esperar(10);
                     }
@@ -111,7 +112,7 @@ final class Jogo implements Serializable {
             }
             else{ // Vez do oponente
                 tab1 = jogador.getTab(); //Tab1 recebe o tabuleiro do jogador local
-                Partida jTab = new Partida(false, tab1, jogador.getNome()); //Cria uma noja janela com o tabuleiro do player local
+                Rodada jTab = new Rodada(false, tab1, jogador.getNome()); //Cria uma noja janela com o tabuleiro do player local
                 output.writeObject(jogador); //Envia o tabuleiro do jogador local para o oponente
                 while (!jogador.isVezJogador()) { //Enquanto a vez do jogador local não chegar, continua atualizando a tela
                     //Espera até que a vez do oponente termine
@@ -130,7 +131,7 @@ final class Jogo implements Serializable {
         }
         
         else{
-            Partida oTab = new Partida(true, tab2, jogador.getNome());
+            Rodada oTab = new Rodada(true, tab2, jogador.getNome());
             synchronized(LOCK){
                 while(oTab.estaEmUso()){ //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
                     try{LOCK.wait();}
@@ -139,7 +140,7 @@ final class Jogo implements Serializable {
             }
             esperar(2000); //Pausa para que o usuário analise o tabuleiro
             oTab.dispose();
-            Partida jTab = new Partida(false, tab1, "Computador");
+            Rodada jTab = new Rodada(false, tab1, "Computador");
             esperar(2000); //Pausa dramática
             jTab.tirodadooponente(ai.atirar(tab1)); //Jogada do bot é feita
             esperar(2000); //Pausa para que o usuário analise o tabuleiro
@@ -170,19 +171,12 @@ final class Jogo implements Serializable {
     
     
     public void vitoria (){
-        JLabel texto;
         if (jogador.isVivo()){
-            texto = new JLabel(jogador.getNome() + " venceu!");
+            JOptionPane.showMessageDialog(null, jogador.getNome() + " venceu!", "FIM DO JOGO", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            texto = new JLabel(oponente.getNome() + " venceu!");
+            JOptionPane.showMessageDialog(null, oponente.getNome() + " venceu!", "FIM DO JOGO", JOptionPane.INFORMATION_MESSAGE);
         }
-        JFrame mostrartexto = new JFrame();
-        mostrartexto.add(texto);
-        mostrartexto.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        mostrartexto.setSize( 200, 100 ); 
-        mostrartexto.setResizable(false);
-        mostrartexto.setVisible( true );
     }
     
 }

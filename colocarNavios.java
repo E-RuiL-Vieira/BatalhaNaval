@@ -10,11 +10,16 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
 
 
 
 //Essa classe é responsável pela tela na qual o usuário posiciona os seus navios no tabuleiro. 
-public class colocarNavios extends Oceano{
+public class colocarNavios extends GUI{
     private Direcao direcao;
     private ActionListener ButtonListener;
     private JButton Norte = new JButton("Norte");
@@ -53,13 +58,13 @@ public class colocarNavios extends Oceano{
         constraints.gridx = 0;
         constraints.gridy = tab.getY() + 1;
         constraints.gridwidth = 10;
-        constraints.ipady = 20;
+        constraints.ipady = 10;
         JLabel navioatual = new JLabel("Colocando agora: " + n.getTipo().name() + ", de tamanho: " + n.getComprimento());
         oceano.add(navioatual, constraints);
         
         //Botões para determinação da criação
-        constraints.gridx = 0; 
-        constraints.gridy = tab.getY() + 2;
+        Norte.setPreferredSize(new Dimension(50, 100));
+       Norte.setBorder(BorderFactory.createEtchedBorder(0));
         Norte.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -69,8 +74,10 @@ public class colocarNavios extends Oceano{
                 simularColocar();
             }
         });
+        constraints.gridx = 0; 
+        constraints.gridy = tab.getY() + 2;
+        
         oceano.add(Norte, constraints);
-        constraints.gridx = 3; 
         Sul.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -80,8 +87,9 @@ public class colocarNavios extends Oceano{
                 simularColocar();
             }
         });
+        constraints.gridx = 2; 
+        constraints.gridy = tab.getY() + 2;
         oceano.add(Sul, constraints);
-        constraints.gridx = 7; 
         Leste.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -91,8 +99,8 @@ public class colocarNavios extends Oceano{
                 simularColocar();
             }
         });
+        constraints.gridx = 6; 
         oceano.add(Leste, constraints);
-        constraints.gridx = 5; 
         Oeste.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -102,8 +110,8 @@ public class colocarNavios extends Oceano{
                 simularColocar();
             }
         });
+        constraints.gridx = 4; 
         oceano.add(Oeste, constraints);
-        constraints.gridx = 9; 
         Enter.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -113,37 +121,8 @@ public class colocarNavios extends Oceano{
                 }
             }
         });
+        constraints.gridx = 8; 
         oceano.add(Enter, constraints);
-        /*
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(86, 86, 86)
-                .addComponent(Norte)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Sul)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Leste)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Oeste)
-                .addGap(52, 52, 52)
-                .addComponent(Enter)
-                .addGap(112, 112, 112))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(569, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Norte)
-                    .addComponent(Sul)
-                    .addComponent(Leste)
-                    .addComponent(Oeste)
-                    .addComponent(Enter))
-                .addGap(8, 8, 8))
-        );*/
     }
     
     private void simularColocar(){

@@ -16,9 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 
 // O objetivo desse objeto é fornecer um template para as duas interfaces principais do jogo - A tela de colocação dos navios do jogador, e o tabuleiro da partida. Ele representa o tabuleiro do jogo.
-public abstract class Oceano extends JFrame {
+public abstract class GUI extends JFrame {
     private final String[] letras = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-    private GridBagLayout grid;
+    protected GridBagLayout grid;
     protected GridBagConstraints constraints;
     protected Tabuleiro tab;
     protected boolean emuso;
@@ -26,7 +26,7 @@ public abstract class Oceano extends JFrame {
     protected JPanel oceano = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     
-    public Oceano(Tabuleiro tab){
+    public GUI(Tabuleiro tab){
         this.setSize(680, 750);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
@@ -102,7 +102,7 @@ public abstract class Oceano extends JFrame {
     
     //Determina a cor do botão determinado, a depender do estado do seu respectivo quadrado
     protected void cor(int i, int j){
-        StatusQ status = tab.getCasa(i, j).getStatus();
+        Quadrado.StatusQ status = tab.getCasa(i, j).getStatus();
         switch (status) {
             case VAZIO:
                 casas[i][j].setBackground(Color.CYAN);

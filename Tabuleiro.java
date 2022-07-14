@@ -34,7 +34,7 @@ public class Tabuleiro implements Serializable {
     }
     
     public boolean podeAtirar(int x, int y){ //Caso o quadrado escolhido já tenha sido alvo antes - ou seja, seja afundado ou errado - ele não é passível de um tiro. Caso contrário, retornamos verdadeiro.
-        return oceano[x][y].getStatus() == StatusQ.NAVIO || oceano[x][y].getStatus() == StatusQ.VAZIO;
+        return oceano[x][y].getStatus() == Quadrado.StatusQ.NAVIO || oceano[x][y].getStatus() == Quadrado.StatusQ.VAZIO;
     }
     
     
@@ -67,7 +67,7 @@ public class Tabuleiro implements Serializable {
     
     
     public boolean isVazio(int x, int y){
-        return oceano[x][y].getStatus() == StatusQ.VAZIO;
+        return oceano[x][y].getStatus() == Quadrado.StatusQ.VAZIO;
     }
     
     public ArrayList<Quadrado> colocarNavio(int x, int y, Direcao direcao, int comprimento){
