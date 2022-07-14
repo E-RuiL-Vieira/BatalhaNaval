@@ -89,23 +89,22 @@ final class Jogo implements Serializable {
     
     public void jogadas() throws IOException, ClassNotFoundException{
         if (multiplayer){
-           
             if (vez){
-            oponente = readJogador();
-            tab2 = oponente.getTab();
-            Partida oTab = new Partida(true, tab2);
-            while(oTab.estaEmUso()); 
-            sendJogador(oponente);
-            vez = false;
+                oponente = readJogador();
+                tab2 = oponente.getTab();
+                Partida oTab = new Partida(true, tab2);
+                while(oTab.estaEmUso()); 
+                sendJogador(oponente);
+                vez = false;
             }
             else{
-            sendJogador(jogador); 
-            //jogador 
-            jogador = readJogador();
-            vez = true;
+                Partida jTab = new Partida(false, tab1);
+                sendJogador(jogador); 
+                //espera o oponente 
+                jogador = readJogador();
+                jTab.atualizar();
+                vez = true;
             }
-            
-           
         
         }
         
