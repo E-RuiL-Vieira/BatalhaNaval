@@ -22,6 +22,7 @@ final class Jogo implements Serializable {
     private Bot ai;
     private Tabuleiro tab1;
     private Tabuleiro tab2;
+    public static Object LOCK = new Object();
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private boolean multiplayer;
@@ -47,8 +48,11 @@ final class Jogo implements Serializable {
         
         for (Navio n : jogador.getNavios()) {
             colocarNavios colocarnavios = new colocarNavios(tab1, n);
-            while(colocarnavios.estaEmUso()){
-                esperar(10);
+            synchronized(LOCK){
+                while(colocarnavios.estaEmUso()){
+                    try{LOCK.wait();}
+                    catch(InterruptedException e){break;}
+                }
             }
             colocarnavios.dispose();
         }
@@ -127,9 +131,12 @@ final class Jogo implements Serializable {
         
         else{
             Partida oTab = new Partida(true, tab2, jogador.getNome());
-            while(oTab.estaEmUso()){
-                esperar(10);
-            } //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
+            synchronized(LOCK){
+                while(oTab.estaEmUso()){ //Enquanto o usuário estiver fazendo a sua jogada, o resto do ojogo parará
+                    try{LOCK.wait();}
+                    catch(InterruptedException e){break;}
+                }
+            }
             esperar(2000); //Pausa para que o usuário analise o tabuleiro
             oTab.dispose();
             Partida jTab = new Partida(false, tab1, "Computador");

@@ -169,6 +169,9 @@ public class colocarNavios extends Oceano{
         if (tab.podeColocar(xCoord, yCoord, direcao, navio.getComprimento())){
             navio.criarNavio(xCoord, yCoord, direcao, tab);
             emuso=false;
+            synchronized(Jogo.LOCK){
+                Jogo.LOCK.notifyAll();
+            }
         }
         else{   
             JOptionPane.showMessageDialog(null, "Você não pode colocar esse navio", "Alerta", JOptionPane.ERROR_MESSAGE);

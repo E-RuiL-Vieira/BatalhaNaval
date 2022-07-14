@@ -37,7 +37,9 @@ public class Partida extends Oceano{
                 cor(xCoord, yCoord); 
                 ativarbotoes(false); //Como já acabou a rodada do jogador, os botões são desativados e o emuso é mudado para falso
                 emuso = false;
-            }
+                synchronized(Jogo.LOCK){
+                    Jogo.LOCK.notifyAll();
+                }}
         };
         for (int i = 0; i < tab.getX(); i++){ //Acrescenta o listener dos botões para todos os botões
             for (int j = 0; j < tab.getY(); j++){
