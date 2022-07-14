@@ -87,7 +87,7 @@ final class Jogo implements Serializable {
         else { // CLIENTE
             host = false;
             jogador.setVezJogador(false);
-            socket = new Socket("192.168.1.101", 1234);
+            socket = new Socket("localhost", 1234);
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
         }
