@@ -63,6 +63,8 @@ public class colocarNavios extends Oceano{
         Norte.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
+                atualizar();
+                casas[xCoord][yCoord].setBackground(Color.WHITE);
                 direcao = Direcao.NORTE;
                 simularColocar();
             }
@@ -72,6 +74,8 @@ public class colocarNavios extends Oceano{
         Sul.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
+                atualizar();
+                casas[xCoord][yCoord].setBackground(Color.WHITE);
                 direcao = Direcao.SUL;
                 simularColocar();
             }
@@ -81,6 +85,8 @@ public class colocarNavios extends Oceano{
         Leste.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
+                atualizar();
+                casas[xCoord][yCoord].setBackground(Color.WHITE);
                 direcao = Direcao.LESTE;
                 simularColocar();
             }
@@ -90,6 +96,8 @@ public class colocarNavios extends Oceano{
         Oeste.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
+                atualizar();
+                casas[xCoord][yCoord].setBackground(Color.WHITE);
                 direcao = Direcao.OESTE;
                 simularColocar();
             }
@@ -99,6 +107,7 @@ public class colocarNavios extends Oceano{
         Enter.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
+                atualizar();
                 if(direcao != Direcao.VAZIO){
                     colocarNavio();
                 }

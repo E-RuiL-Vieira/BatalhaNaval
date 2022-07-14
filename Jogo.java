@@ -44,13 +44,14 @@ final class Jogo implements Serializable {
         //Cria o objeto jogador do usuário
         String nomeP1 = JOptionPane.showInputDialog("Por favor insira seu nome");
         jogador = new Jogador (tab1, nomeP1);
-        //jogador.posicionarNavios(); //Posiciona navios automaticamente
-        
+        jogador.posicionarNavios(); //Posiciona navios automaticamente
+        /*
         for (Navio n : jogador.getNavios()) {
             colocarNavios colocarnavios = new colocarNavios(tab1, n);
             while(colocarnavios.estaEmUso());
             colocarnavios.dispose();
         }
+        */
     }
   
     
@@ -94,7 +95,8 @@ final class Jogo implements Serializable {
                     Partida oTab = new Partida(true, tab2);
                     while(oTab.estaEmUso());
                     System.out.println("Comeco envio");
-                    output.writeObject(jogador); //Envia dados
+                    
+                    output.writeObject(oponente); //Envia dados
                     System.out.println("Fim envio ddos");
                     vez = false;
                     jogador.setVezJogador(false);

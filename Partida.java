@@ -1,3 +1,4 @@
+
 /* 
 Autores: Rui Emanuel Lima Viera - NUSP: 11810182
          André Guarnier de Mitri - NUSP: 11395579
@@ -35,6 +36,7 @@ public class Partida extends Oceano{
                 tirodado(tab.getCasa(xCoord, yCoord).Alvo()); 
                 cor(xCoord, yCoord); 
                 ativarbotoes(false); //Como já acabou a rodada do jogador, os botões são desativados e o emuso é mudado para falso
+                System.out.println("TESTE");
                 emuso = false;
             }
         };

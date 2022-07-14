@@ -45,7 +45,7 @@ public class Tabuleiro implements Serializable {
                 if (y2 >= this.y || y2 < 0){ //Caso a poupa do navio ultrapasse os limites do tabuleiro, ele não pode ser colocado neste tabuleiro. 
                     return false;
                 }
-                for(int j = y; j != y2; j=j+direcao.getY()){ //Verificamos todos os quadrados do futuro navio. Caso haja algum que não esteja vazio, um navio não pode ser colocado lá.
+                for(int j = y; j != y2 + direcao.getY(); j=j+direcao.getY()){ //Verificamos todos os quadrados do futuro navio. Caso haja algum que não esteja vazio, um navio não pode ser colocado lá.
                     if (!isVazio(x, j)){
                             return false;                    
                 }
@@ -56,7 +56,7 @@ public class Tabuleiro implements Serializable {
             if (x2 >= this.x || x2 < 0 ) { //Caso a poupa do navio ultrapasse os limites do tabuleiro, ele não pode ser colocado neste tabuleiro.
                 return false;
             }
-            for(int i = x; i != x2; i=i+direcao.getX()) { //Verificamos todos os quadrados do futuro navio. Caso haja algum que não esteja vazio, um navio não pode ser colocado lá.
+            for(int i = x; i != x2 + direcao.getX(); i=i+direcao.getX()) { //Verificamos todos os quadrados do futuro navio. Caso haja algum que não esteja vazio, um navio não pode ser colocado lá.
                 if (!isVazio(i, y)){
                     return false;
                 }
