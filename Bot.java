@@ -22,6 +22,7 @@ public final class Bot extends Jogador {
         nome = "Computador";
         direcao = Direcao.VAZIO;
         c = 0;
+        possiveis.clear();
         possiveis.addAll(Arrays.asList(Arrays.copyOfRange(Direcao.values(), 0, 4)));
         posicionarNavios();
     }
@@ -34,14 +35,15 @@ public final class Bot extends Jogador {
             c = 0;
             acertou = false;
             direcao = Direcao.VAZIO;
+            possiveis.clear();
             possiveis.addAll(Arrays.asList(Arrays.copyOfRange(Direcao.values(), 0, 4)));
             return atirar(oTab);
         }
         if (!acertou){ //Caso o tiro anterior não tenha sido um acerto, dá-se um tiro aleatório
-            do{            
+            do{
                 x = rand.nextInt(oTab.getX());
-                y = rand.nextInt(oTab.getY());}
-            while(!oTab.podeAtirar(x, y)); //Verifica se o valor adquirido é uma posição válida
+                y = rand.nextInt(oTab.getY());
+            } while(!oTab.podeAtirar(x, y)); //Verifica se o valor adquirido é uma posição válida
             if(oTab.getCasa(x, y).Alvo()){ //Se acertar o tiro, armazenamos as coordenadas do tiro dado
                 acertou = true;
                 ultimotiro[0] = x;
@@ -51,14 +53,27 @@ public final class Bot extends Jogador {
             }
             return false;
         }
-        
         if(direcao == Direcao.VAZIO){ //Para chegar aqui, teríamos que ter acabado de dar um tiro certo, porém ainda não encontramos uma direção que contenha um navio
+            for (int i = 0; i < possiveis.size();) {
+                if (!oTab.podeAtirar(ultimotiro[0]+possiveis.get(i).getX(), ultimotiro[1]+possiveis.get(i).getY())) {
+                  possiveis.remove(i);
+                  continue;
+                }
+             i++;
+            }
+            if (possiveis.isEmpty()) {
+                c = 0;
+                acertou = false;
+                direcao = Direcao.VAZIO;
+                possiveis.clear();
+                possiveis.addAll(Arrays.asList(Arrays.copyOfRange(Direcao.values(), 0, 4)));
+                return atirar(oTab);
+            }
             do{
                 novaDirecao = possiveis.get(rand.nextInt(possiveis.size()));
                 x = ultimotiro[0]+novaDirecao.getX();
                 y = ultimotiro[1]+novaDirecao.getY();
-            }while((x < 0 || x >= oTab.getX() || y < 0 || y >= oTab.getY())); //Verifica se as coordenadas adquiridas estão além dos limites do tabuleiro ou se já foram alvos anteriormente
-
+            }while((x < 0 || x >= oTab.getX() || y < 0 || y >= oTab.getY()) || !oTab.podeAtirar(x, y)); //Verifica se as coordenadas adquiridas estão além dos limites do tabuleiro ou se já foram alvos anteriormente
             if(oTab.getCasa(x, y).Alvo()){
                 //Caso o tiro tenha dado certo, isso significa que há um navio potencialmente nessa direção. Aumentamos o comprimento do navio e armazenamos a direção certa adquirida. 
                 direcao = novaDirecao;
@@ -80,6 +95,7 @@ public final class Bot extends Jogador {
             c = 0;
             acertou = false;
             direcao = Direcao.VAZIO;
+            possiveis.clear();
             possiveis.addAll(Arrays.asList(Arrays.copyOfRange(Direcao.values(), 0, 4)));
             return atirar(oTab);
         }
@@ -92,10 +108,9 @@ public final class Bot extends Jogador {
         c = 0;
         direcao = Direcao.VAZIO;
         acertou = false;
+        possiveis.clear();
         possiveis.addAll(Arrays.asList(Arrays.copyOfRange(Direcao.values(), 0, 4)));
         return false;           
         //Assim como antes, se acertamos o tiro, armazenamos as coordenadas novas. Caso erramos, resetamos todos os atributos.
     }  
-    
-
 }
