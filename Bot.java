@@ -54,10 +54,11 @@ public final class Bot extends Jogador {
         
         if(direcao == Direcao.VAZIO){ //Para chegar aqui, teríamos que ter acabado de dar um tiro certo, porém ainda não encontramos uma direção que contenha um navio
             do{
+                System.out.println("AA");
                 novaDirecao = possiveis.get(rand.nextInt(possiveis.size()));
                 x = ultimotiro[0]+novaDirecao.getX();
                 y = ultimotiro[1]+novaDirecao.getY();
-            }while((x < 0 || x >= tab.getX() || y < 0 || y >= tab.getY()) || tab.podeAtirar(x, y)); //Verifica se as coordenadas adquiridas estão além dos limites do tabuleiro ou se já foram alvos anteriormente
+            }while((x < 0 || x >= oTab.getX() || y < 0 || y >= oTab.getY()) || !oTab.podeAtirar(x, y)); //Verifica se as coordenadas adquiridas estão além dos limites do tabuleiro ou se já foram alvos anteriormente
 
             if(oTab.getCasa(x, y).Alvo()){
                 //Caso o tiro tenha dado certo, isso significa que há um navio potencialmente nessa direção. Aumentamos o comprimento do navio e armazenamos a direção certa adquirida. 
