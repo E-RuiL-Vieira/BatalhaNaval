@@ -26,11 +26,9 @@ final class Jogo implements Serializable {
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private boolean multiplayer;
-    private boolean host;
     
     
     public Jogo() throws IOException, ClassNotFoundException {
-        host = false;
         multiplayer = false;
         Object[] opcoes = {"Singleplayer", "Multiplayer"};
         Object reply = JOptionPane.showInputDialog(null, "Escolha um modo de jogo", "Menu", JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
@@ -75,9 +73,8 @@ final class Jogo implements Serializable {
         reply2 = JOptionPane.showInputDialog(null, "Hostear ou entrar", "Menu", JOptionPane.INFORMATION_MESSAGE, null, hostopcoes, hostopcoes[0]);
         Socket socket;
         if (reply2.equals("Hostear")) {// HOST
-            host = true;
             jogador.setVezJogador(true);
-            ServerSocket server = new ServerSocket(1234);
+            ServerSocket server = new ServerSocket(1300);
             System.out.println("Aguardando conexões...");
             socket = server.accept();
             System.out.println("Conectado...");
@@ -85,9 +82,8 @@ final class Jogo implements Serializable {
             input = new ObjectInputStream(socket.getInputStream());
         }
         else { // CLIENTE
-            host = false;
             jogador.setVezJogador(false);
-            socket = new Socket("localhost", 1234);
+            socket = new Socket("localhost", 1300);
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
         }
