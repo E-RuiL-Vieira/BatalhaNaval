@@ -54,7 +54,6 @@ public final class Bot extends Jogador {
         
         if(direcao == Direcao.VAZIO){ //Para chegar aqui, teríamos que ter acabado de dar um tiro certo, porém ainda não encontramos uma direção que contenha um navio
             do{
-                System.out.println("AA");
                 novaDirecao = possiveis.get(rand.nextInt(possiveis.size()));
                 x = ultimotiro[0]+novaDirecao.getX();
                 y = ultimotiro[1]+novaDirecao.getY();
